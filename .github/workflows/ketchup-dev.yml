@@ -38,6 +38,6 @@ jobs:
       - name: Update dev branch
         run: |
           gcloud functions list
-#          cd functions/test_latency
-#          make deploy-dev
-#          gcloud functions list
+          cd functions/test_latency
+          make deploy-dev
+          gcloud functions list
