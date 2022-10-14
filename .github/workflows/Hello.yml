@@ -25,6 +25,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
       # Runs customer-defined-script
       - name: Run a CRD script
         run: |
@@ -41,13 +46,7 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          
-      - name: Set up Cloud SDK
-        uses: google-github-actions/auth@v0.3.1
-        with:
-          project_id: ${{ secrets.PROJECT_ID }}
-          service_account_key: ${{ secrets.SA_KEY }}
-          export_default_credentials: true
+        
       - name: Update dev branch
         run: |
           gcloud config set project mcd-ketchup-dev
