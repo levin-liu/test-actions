@@ -49,5 +49,6 @@ jobs:
         run: |
           gcloud config set project enhanced-cable-365505
           gcloud functions list
+          cd test_latency
           make deploy-dev
           gcloud functions list
