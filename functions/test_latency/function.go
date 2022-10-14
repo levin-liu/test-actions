@@ -1,46 +1,24 @@
 package test_latency
 
 import (
-	"context"
-	"errors"
-	"log"
-	"strconv"
-	"time"
+	"encoding/json"
+	"fmt"
+	"html"
+	"net/http"
 )
 
-// AnalyticsEvent is the payload of an Analytics log event.
-type AnalyticsEvent struct {
-	EventDimensions []EventDimensions `json:"eventDim"`
-	UserDimensions  UserDimensions    `json:"userDim"`
-}
-
-// EventDimensions holds Analytics event dimensions.
-type EventDimensions struct {
-	Name                    string      `json:"name"`
-	Date                    string      `json:"date"`
-	TimestampMicros         string      `json:"timestampMicros"`
-	PreviousTimestampMicros string      `json:"previousTimestampMicros"`
-	Params                  interface{} `json:"params"`
-}
-
-type UserDimensions struct {
-	AppInfo AppInfo `json:"appInfo"`
-}
-
-type AppInfo struct {
-	AppInstanceId string `json:"appInstanceId"`
-	AppPlatform   string `json:"appPlatform"`
-}
-
-func TestLatency(ctx context.Context, e AnalyticsEvent) error {
-	if len(e.EventDimensions) == 0 {
-		return errors.New("EventDimensions don't exist")
+// HelloLatency is an HTTP Cloud Function with a request parameter.
+func HelloLatency(w http.ResponseWriter, r *http.Request) {
+	var d struct {
+		Name string `json:"name"`
 	}
-	timestampMicros, _ := strconv.Atoi(e.EventDimensions[0].TimestampMicros)
-	eventTime := time.Unix(0, int64(timestampMicros*1000))
-	//log.Printf("Event time: %v", eventTime)
-	log.Printf("Latency:%vs", int(time.Since(eventTime).Seconds()))
-	// simulate trigger workflow grpc call
-	time.Sleep(time.Second)
-	return nil
+	if err := json.NewDecoder(r.Body).Decode(&d); err != nil {
+		fmt.Fprint(w, "Hello, Latency!")
+		return
+	}
+	if d.Name == "" {
+		fmt.Fprint(w, "Hello, Latency!")
+		return
+	}
+	fmt.Fprintf(w, "Hello, %s!\n", html.EscapeString(d.Name))
 }
