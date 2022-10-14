@@ -34,7 +34,6 @@ jobs:
       - name: Run a CRD script
         run: |
           cd functions; sh hello.sh
-          echo ${{ secrets.PROJECT_ID }}
           echo ${{ secrets.SA_KEY }}
 
       # Runs a single command using the runners shell
@@ -49,5 +48,5 @@ jobs:
         
       - name: Update dev branch
         run: |
-          gcloud config set project mcd-ketchup-dev
+          gcloud config set project enhanced-cable-365505
           gcloud functions list
