@@ -34,7 +34,6 @@ jobs:
       - name: Run a CRD script
         run: |
           cd functions; sh hello.sh
-          echo ${{ secrets.SA_KEY }}
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
