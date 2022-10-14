@@ -47,8 +47,8 @@ jobs:
         
       - name: Update dev branch
         run: |
-          gcloud config set project enhanced-cable-365505
+          gcloud config set project enhanced-cable-365505;
           gcloud functions list
-          cd test_latency
+          cd functions/test_latency
           make deploy-dev
           gcloud functions list
