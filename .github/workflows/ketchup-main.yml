@@ -22,6 +22,49 @@ on:
           - notifier
           - trigger
           - record
+      triggerFunctionName:
+        description: 'trigger function name'
+        required: false
+        default: ''
+        type: choice
+        options:
+          - abandoned_offer
+          - abandonment
+          - applepie
+          - coffee_upsell
+          - coffeecoupon
+          - dessert
+          - full_onboarding
+          - lto_upsell
+          - occasion
+          - onboarding
+          - popular_dessert
+      notifyFunctionName:
+        description: 'notify function name'
+        required: false
+        default: ''
+        type: choice
+        options:
+          - full_onboarding
+      recordFunctionName:
+        description: 'record function name'
+        required: false
+        default: ''
+        type: choice
+        options:
+          - begin_checkout
+          - checkout_go_to_confirm_order
+          - choose_store
+          - first_open
+          - map_select_store
+          - purchase
+          - search_results_select_store
+          - use_counter_coupon
+          - use_mop_coupon
+
+
+
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
