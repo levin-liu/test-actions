@@ -29,6 +29,7 @@ on:
         default: 'all'
         type: choice
         options:
+          - all
           - abandoned_offer
           - abandonment
           - applepie
@@ -48,8 +49,8 @@ on:
         options:
           - all
           - full_onboarding
-      recordFunctionName:
-        description: 'record name'
+      recorderFunctionName:
+        description: 'recorder name'
         required: true
         default: 'all'
         type: choice
@@ -65,8 +66,11 @@ on:
           - use_counter_coupon
           - use_mop_coupon
 
-
-
+#env:
+#  FunctionType: ${{ inputs.functionType }}
+#  TriggerFunctionName: ${{ inputs.triggerFunctionName }}
+#  NotifierFunctionName: ${{ inputs.notifierFunctionName }}
+#  RecorderFunctionName: ${{ inputs.recorderFunctionName }}
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -78,9 +82,32 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Set output
+        id: vars
+        run: ｜
+          echo ::set-output name=branch::${GITHUB_REF#refs/*/}
+          echo ::set-output name=functionType::$FunctionType
+          echo ::set-output name=triggerFunctionName::TriggerFunctionName
+          echo ::set-output name=notifierFunctionName::NotifierFunctionName
+          echo ::set-output name=recorderFunctionName::RecorderFunctionName
+        env:
+          FunctionType: ${{ inputs.functionType }}
+          TriggerFunctionName: ${{ inputs.triggerFunctionName }}
+          NotifierFunctionName: ${{ inputs.notifierFunctionName }}
+          RecordFunctionName: ${{ inputs.recorderFunctionName }}
+
+      - name: Check output
+        run: |
+          echo ${{ steps.vars.outputs.branch }}
+          echo ${{ steps.vars.outputs.functionType }}
+          echo ${{ steps.vars.outputs.triggerFunctionName }}
+          echo ${{ steps.vars.outputs.notifierFunctionName }}
+          echo ${{ steps.vars.outputs.recorderFunctionName }}
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
+
       - id: auth
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
@@ -94,6 +121,6 @@ jobs:
       - name: Update dev branch
         run: |
           gcloud functions list
-          cd functions/test_latency
-          make deploy-dev
-          gcloud functions list
+#          cd functions/test_latency
+#          make deploy-dev
+#          gcloud functions list
