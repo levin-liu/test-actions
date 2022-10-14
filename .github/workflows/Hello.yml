@@ -27,7 +27,7 @@ jobs:
       
       # Runs customer-defined-script
       - name: Run a CRD script
-        run: cd function; sh hello.sh
+        run: cd functions; sh hello.sh
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
