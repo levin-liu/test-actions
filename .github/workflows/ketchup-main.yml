@@ -77,7 +77,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
   read-branch:
     runs-on: ubuntu-latest
     if: ${GITHUB_REF##*/} == 'test' || ${GITHUB_REF##*/}  == 'stg' || ${GITHUB_REF##*/}  == 'main'
