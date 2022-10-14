@@ -2,3 +2,4 @@
 
 date
 echo "Hello Friday"
+
