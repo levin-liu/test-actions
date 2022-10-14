@@ -19,13 +19,13 @@ on:
         default: 'trigger'
         type: choice
         options:
-          - notifier
           - trigger
+          - notifier
           - record
       triggerFunctionName:
-        description: 'trigger function name'
-        required: false
-        default: ''
+        description: 'trigger name'
+        required: true
+        default: 'all'
         type: choice
         options:
           - abandoned_offer
@@ -39,19 +39,21 @@ on:
           - occasion
           - onboarding
           - popular_dessert
-      notifyFunctionName:
-        description: 'notify function name'
+      notifierFunctionName:
+        description: 'notifier name'
         required: false
-        default: ''
+        default: 'all'
         type: choice
         options:
+          - all
           - full_onboarding
       recordFunctionName:
-        description: 'record function name'
-        required: false
-        default: ''
+        description: 'record name'
+        required: true
+        default: 'all'
         type: choice
         options:
+          - all
           - begin_checkout
           - checkout_go_to_confirm_order
           - choose_store
