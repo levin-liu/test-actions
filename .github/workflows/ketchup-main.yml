@@ -80,7 +80,10 @@ jobs:
 
   read-branch:
     runs-on: ubuntu-latest
-    if: ${GITHUB_REF##*/}  == 'test' || ${GITHUB_REF##*/}  == 'stg' || ${GITHUB_REF##*/}  == 'main'
+    if: ${GITHUB_REF##*/} == 'test' || ${GITHUB_REF##*/}  == 'stg' || ${GITHUB_REF##*/}  == 'main'
+    steps:
+      - name: Read branch
+        run: echo continue build
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
