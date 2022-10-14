@@ -29,7 +29,7 @@ jobs:
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
-          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+          credentials_json: ${{ secrets.SA_KEY }}
       # Runs customer-defined-script
       - name: Run a CRD script
         run: |
