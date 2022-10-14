@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-// HelloLatency is an HTTP Cloud Function with a request parameter.
-func HelloLatency(w http.ResponseWriter, r *http.Request) {
+// TestLatency is an HTTP Cloud Function with a request parameter.
+func TestLatency(w http.ResponseWriter, r *http.Request) {
 	var d struct {
 		Name string `json:"name"`
 	}
