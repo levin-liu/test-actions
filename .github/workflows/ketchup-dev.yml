@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Hello
+name: Ketchup-dev
 
 # Controls when the workflow will run
 on:
@@ -37,7 +37,6 @@ jobs:
 
       - name: Update dev branch
         run: |
-#          gcloud config set project mcd-ketchup-dev
           gcloud functions list
 #          cd functions/test_latency
 #          make deploy-dev
