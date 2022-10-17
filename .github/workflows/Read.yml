@@ -117,25 +117,22 @@ jobs:
       - name: Check Test param
         if: ${{needs.read.outputs.branchName}} == 'test'
         run: |
-          export ENV=test
-          export GCP_PROJECT=mcd-test
-          echo "::set-env name=ENV::$ENV"
+          echo "ENV=test" >> $GITHUB_ENV
+          echo "GCP_PROJECT=mcd-test" >> $GITHUB_ENV
 
       - name: Check Stg param
         if: ${{needs.read.outputs.branchName}} == 'stg'
         run: |
-          export ENV=stg
-          export GCP_PROJECT=mcd-stg
-          echo "::set-env name=ENV::$ENV"    
+          echo "ENV=stg" >> $GITHUB_ENV
+          echo "GCP_PROJECT=mcd-stg" >> $GITHUB_ENV   
           
       - name: Check Main param
-        if: ${{needs.read.outputs.branchName}} == 'main'
+        if: ${{ needs.read.outputs.branchName == 'main'
         run: |
-          export ENV=main
-          export GCP_PROJECT=mcd-main
-          echo "::set-env name=ENV::$ENV" 
+          echo "ENV=main" >> $GITHUB_ENV
+          echo "GCP_PROJECT=mcd-main" >> $GITHUB_ENV
 
       - name:  Echo env param
         run: |
-          echo $ENV
-          echo $GCP_PROJECT
+          echo ${{env.ENV}}
+          echo ${{envGCP_PROJECT}}
