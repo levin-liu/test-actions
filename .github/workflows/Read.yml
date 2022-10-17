@@ -99,7 +99,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     needs: [read]
-    if: ( ${{ needs.read.outputs.branchName }} == 'main' || ${{ needs.read.outputs.branchName }} == 'test' )
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'  }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -132,7 +132,30 @@ jobs:
           echo "ENV=main" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-main" >> $GITHUB_ENV
 
-      - name:  Echo env param
+      - name: Check Trigger FunctionType
+        if: ${{ needs.read.outputs.functionType == 'trigger' }}
         run: |
+          cd trigger
+          echo "FunctionName=needs.read.outputs.triggerFunctionName" >> $GITHUB_ENV
+          sh hello.sh
+
+      - name: Check Recorder FunctionType
+        if: ${{ needs.read.outputs.functionType == 'recorder' }}
+        run: |
+          cd recorder
+          echo "FunctionName=needs.read.outputs.notifierFunctionName" >> $GITHUB_ENV
+          sh hello.sh
+
+      - name: Check Recorder FunctionType
+        if: ${{ needs.read.outputs.functionType == 'notifier' }}
+        run: |
+          cd notifier
+          echo "FunctionName=needs.read.outputs.recorderFunctionName" >> $GITHUB_ENV
+          sh hello.sh
+
+      - name:  Echo Result
+        run: |
+          pwd
           echo ${{env.ENV}}
           echo ${{env.GCP_PROJECT}}
+          echo ${{env.FunctionName}}
