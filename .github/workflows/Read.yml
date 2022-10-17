@@ -74,12 +74,17 @@ on:
 jobs:
   read:
     runs-on: ubuntu-latest
-    if: ${GITHUB_REF#refs/heads/}  == 'main'
+    if: ${{GITHUB_REF#refs/heads/}}  == 'main'
     steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch_name;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - name: Read branch name
         run: |
           echo continue build
           echo ${GITHUB_REF#refs/heads/}
+          echo ${{steps.extract_branch.outputs.branch}}
 
   # This workflow contains a single job called "build"
   build:
