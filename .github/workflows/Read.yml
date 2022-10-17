@@ -115,13 +115,13 @@ jobs:
           echo 'EventFunctionName is ' ${{needs.read.outputs.recorderFunctionName}}
 
       - name: Check Test param
-        if: ${{ needs.read.outputs.branchName  == 'test' }}
+        if: ${{ github.ref == 'refs/heads/test' }}
         run: |
           echo "ENV=test" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-test" >> $GITHUB_ENV
 
       - name: Check Stg param
-        if: ${{ needs.read.outputs.branchName  == 'stg' }}
+        if: ${{ github.ref == 'refs/heads/stg' }}
         run: |
           echo "ENV=stg" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-stg" >> $GITHUB_ENV   
