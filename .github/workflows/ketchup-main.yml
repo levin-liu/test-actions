@@ -93,11 +93,13 @@ jobs:
       - name: Set output
         id: vars
         run: ｜
-          echo ::set-output name=branch::${GITHUB_REF#refs/*/}
-          echo ::set-output name=functionType::$FunctionType
-          echo ::set-output name=triggerFunctionName::$TriggerFunctionName
-          echo ::set-output name=notifierFunctionName::$NotifierFunctionName
-          echo ::set-output name=recorderFunctionName::$RecorderFunctionName
+#          echo ::set-output name=branch::${GITHUB_REF#refs/*/}
+#          echo ::set-output name=functionType::$FunctionType
+#          echo ::set-output name=triggerFunctionName::$TriggerFunctionName
+#          echo ::set-output name=notifierFunctionName::$NotifierFunctionName
+#          echo ::set-output name=recorderFunctionName::$RecorderFunctionName
+          echo Hello
+          echo World
         env:
           FunctionType: ${{ inputs.functionType }}
           TriggerFunctionName: ${{ inputs.triggerFunctionName }}
@@ -106,11 +108,12 @@ jobs:
 
       - name: Check output
         run: |
-          echo ${{ steps.vars.outputs.branch }}
-          echo ${{ steps.vars.outputs.functionType }}
-          echo ${{ steps.vars.outputs.triggerFunctionName }}
-          echo ${{ steps.vars.outputs.notifierFunctionName }}
-          echo ${{ steps.vars.outputs.recorderFunctionName }}
+#          echo ${{ steps.vars.outputs.branch }}
+#          echo ${{ steps.vars.outputs.functionType }}
+#          echo ${{ steps.vars.outputs.triggerFunctionName }}
+#          echo ${{ steps.vars.outputs.notifierFunctionName }}
+#          echo ${{ steps.vars.outputs.recorderFunctionName }}
+          echo Check
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
