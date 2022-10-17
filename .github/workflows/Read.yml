@@ -77,6 +77,8 @@ jobs:
 #    if: ${{GITHUB_REF#refs/heads/}}  == 'main'
     outputs:
       branchName:  ${GITHUB_REF#refs/heads/}
+      branchName2: ${GITHUB_HEAD_REF}
+      branchName3: ${{github.head_ref}}
       functionType: ${{ inputs.functionType }}
       triggerFunctionName: ${{ inputs.triggerFunctionName }}
       notifierFunctionName: ${{ inputs.notifierFunctionName }}
