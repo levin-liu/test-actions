@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
 #    if: ${{GITHUB_REF#refs/heads/}}  == 'main'
     outputs:
-      branchName:  ${{ steps.extract_branch.branch_name }}
+      branchName:  ${GITHUB_REF#refs/heads/}
       functionType: ${{ inputs.functionType }}
       triggerFunctionName: ${{ inputs.triggerFunctionName }}
       notifierFunctionName: ${{ inputs.notifierFunctionName }}
