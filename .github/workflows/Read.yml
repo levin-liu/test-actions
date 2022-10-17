@@ -76,7 +76,11 @@ jobs:
     runs-on: ubuntu-latest
 #    if: ${{GITHUB_REF#refs/heads/}}  == 'main'
     outputs:
-      branch_name:  ${{ steps.extract_branch.branch_name }}
+      branchName:  ${{ steps.extract_branch.branch_name }}
+      functionType: ${{ inputs.functionType }}
+      triggerFunctionName: ${{ inputs.triggerFunctionName }}
+      notifierFunctionName: ${{ inputs.notifierFunctionName }}
+      recorderFunctionName: ${{ inputs.recorderFunctionName }}
     steps:
       - name: Extract branch name
         run: echo "branch_name='${GITHUB_REF#refs/heads/}'" >> $GITHUB_OUTPUT
@@ -102,7 +106,11 @@ jobs:
       # Runs customer-defined-script
       - name: Run a CRD script
         run: |
-          echo 'This branch is ' ${{needs.read.outputs.branch_name}}
+          echo 'This branch is ' ${{needs.read.outputs.branchName}}
+          echo 'FunctionType is ' ${{needs.read.outputs.functionType}}
+          echo 'TriggerFunctionName is ' ${{needs.read.outputs.triggerFunctionName}}
+          echo 'NotifierFunctionName is ' ${{needs.read.outputs.notifierFunctionName}}
+          echo 'EventFunctionName is ' ${{needs.read.outputs.recorderFunctionName}}
           echo '${{needs.read.outputs.branch_name}}'
           cd functions; sh hello.sh
 
