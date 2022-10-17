@@ -85,7 +85,8 @@ jobs:
         run: |
           echo continue build
           echo ${GITHUB_REF#refs/heads/}
-          echo 'get branch name is ' ${{steps.extract_branch.outputs.branch_name}}
+          echo 'get branch name is ' ${{steps.outputs.branch_name}}
+          echo '${{steps.outputs.branch_name}}'
 
   # This workflow contains a single job called "build"
   build:
@@ -101,6 +102,7 @@ jobs:
       - name: Run a CRD script
         run: |
           echo 'This branch is ' ${{needs.read.outputs.branch_name}}
+          echo '${{needs.read.outputs.branch_name}}'
           cd functions; sh hello.sh
 
       # Runs a single command using the runners shell
