@@ -74,12 +74,10 @@ on:
 jobs:
   read:
     runs-on: ubuntu-latest
+    if: ${GITHUB_REF##*/} == 'test' ||  ${GITHUB_REF##*/}  == 'main'
     steps:
-      runs-on: ubuntu-latest
-      if: ${GITHUB_REF##*/} == 'test' ||  ${GITHUB_REF##*/}  == 'main'
-      steps:
-        - name: Read branch name
-          run: echo continue build
+      - name: Read branch name
+        run: echo continue build
 
 
   # This workflow contains a single job called "build"
