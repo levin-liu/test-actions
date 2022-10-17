@@ -136,26 +136,46 @@ jobs:
         if: ${{ needs.read.outputs.functionType == 'trigger' }}
         run: |
           cd trigger
-          echo "FunctionName=needs.read.outputs.triggerFunctionName" >> $GITHUB_ENV
-          sh hello.sh
+          pwd
+          echo "workdir=trigger" >> $GITHUB_ENV
+          echo "FunctionName=${{needs.read.outputs.triggerFunctionName}}" >> $GITHUB_ENV
 
       - name: Check Recorder FunctionType
         if: ${{ needs.read.outputs.functionType == 'recorder' }}
         run: |
           cd recorder
-          echo "FunctionName=needs.read.outputs.notifierFunctionName" >> $GITHUB_ENV
-          sh hello.sh
+          pwd
+          echo "workdir=recorder" >> $GITHUB_ENV
+          echo "FunctionName=${{needs.read.outputs.recorderFunctionName}}" >> $GITHUB_ENV
 
-      - name: Check Recorder FunctionType
+      - name: Check Notifier FunctionType
         if: ${{ needs.read.outputs.functionType == 'notifier' }}
         run: |
           cd notifier
-          echo "FunctionName=needs.read.outputs.recorderFunctionName" >> $GITHUB_ENV
-          sh hello.sh
+          pwd
+          echo "workdir=notifier" >> $GITHUB_ENV
+          echo "FunctionName=${{needs.read.outputs.notifierFunctionName}}" >> $GITHUB_ENV
 
       - name:  Echo Result
         run: |
           pwd
           echo ${{env.ENV}}
           echo ${{env.GCP_PROJECT}}
+           echo ${{env.workdir}}
           echo ${{env.FunctionName}}
+
+      - name: DeployParam All
+        if: ${{env.FunctionName == 'all'}}
+        run: |
+          cd ${{env.ENV}}
+          pwd
+          echo Make_ALL
+          sh hello.sh
+          
+      - name: DeployParam One
+        if: ${{env.FunctionName != 'all' }}
+        run: |
+          cd ${{env.ENV}}
+          pwd
+          echo ${{env.FunctionName}}
+          sh hello.sh
