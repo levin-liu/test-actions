@@ -24,7 +24,7 @@ on:
         options:
           - trigger
           - notifier
-          - record
+          - recorder
       triggerFunctionName:
         description: 'trigger name'
         required: true

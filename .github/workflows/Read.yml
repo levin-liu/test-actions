@@ -25,7 +25,7 @@ on:
         options:
           - trigger
           - notifier
-          - record
+          - recorder
       triggerFunctionName:
         description: 'trigger name'
         required: true
@@ -103,22 +103,53 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs customer-defined-script
-      - name: Run a CRD script
+      - name: Echo param
         run: |
           echo 'This branch is ' ${{needs.read.outputs.branchName}}
           echo 'FunctionType is ' ${{needs.read.outputs.functionType}}
           echo 'TriggerFunctionName is ' ${{needs.read.outputs.triggerFunctionName}}
           echo 'NotifierFunctionName is ' ${{needs.read.outputs.notifierFunctionName}}
           echo 'EventFunctionName is ' ${{needs.read.outputs.recorderFunctionName}}
-          echo '${{needs.read.outputs.branch_name}}'
-          cd functions; sh hello.sh
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Deploy all trigger functions
+        if:  (${{needs.read.outputs.functionType}} == 'trigger' && ${{needs.read.outputs.triggerFunctionName} == 'all')
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          cd trigger
+          sh hello.sh
+          echo Trigger ALl
+
+      - name: Deploy one trigger functions
+        if: (${{needs.read.outputs.functionType}} == 'trigger' && ${{needs.read.outputs.triggerFunctionName} != 'all')
+        run: |
+          cd trigger
+          sh hello.sh
+          echo Trigger ${{needs.read.outputs.triggerFunctionName}
+
+      - name: Deploy all notifier functions
+        if: (${{needs.read.outputs.functionType}} == 'notifier' && ${{needs.read.outputs.notifierFunctionName} == 'all')
+        run: |
+          cd notifier
+          sh hello.sh
+          echo notifier ALl
+
+      - name: Deploy one notifier functions
+        if: (${{needs.read.outputs.functionType}} == 'notifier' && ${{needs.read.outputs.notifierFunctionName} != 'all')
+        run: |
+          cd notifier
+          sh hello.sh
+          echo notifier ${{needs.read.outputs.notifierFunctionName}
+
+      - name: Deploy all recorder functions
+        if: (${{needs.read.outputs.functionType}} == 'recorder' && ${{needs.read.outputs.recorderFunctionName} != 'all')
+        run: |
+          cd recorder
+          sh hello.sh
+          echo Recorder ${{needs.read.outputs.recorderFunctionName}
+
+      - name: Deploy one recorder functions
+        if: (${{needs.read.outputs.functionType}} == 'recorder' && ${{needs.read.outputs.recorderFunctionName} != 'all')
+        run: |
+          cd recorder
+          sh hello.sh
+          echo Recorder ${{needs.read.outputs.recorderFunctionName}
+
