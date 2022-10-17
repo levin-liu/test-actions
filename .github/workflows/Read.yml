@@ -135,4 +135,4 @@ jobs:
       - name:  Echo env param
         run: |
           echo ${{env.ENV}}
-          echo ${{envGCP_PROJECT}}
+          echo ${{env.GCP_PROJECT}}
