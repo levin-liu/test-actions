@@ -115,19 +115,19 @@ jobs:
           echo 'EventFunctionName is ' ${{needs.read.outputs.recorderFunctionName}}
 
       - name: Check Test param
-        if: ${{needs.read.outputs.branchName}} == 'test'
+        if: ( ${{needs.read.outputs.branchName}} == 'test' )
         run: |
           echo "ENV=test" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-test" >> $GITHUB_ENV
 
       - name: Check Stg param
-        if: ${{needs.read.outputs.branchName}} == 'stg'
+        if: ( ${{needs.read.outputs.branchName}} == 'stg'_
         run: |
           echo "ENV=stg" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-stg" >> $GITHUB_ENV   
           
       - name: Check Main param
-        if: ${{ needs.read.outputs.branchName == 'main'
+        if: ( ${{ needs.read.outputs.branchName == 'main' )
         run: |
           echo "ENV=main" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-main" >> $GITHUB_ENV
