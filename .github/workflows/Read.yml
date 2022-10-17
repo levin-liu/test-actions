@@ -85,7 +85,7 @@ jobs:
         run: |
           echo continue build
           echo ${GITHUB_REF#refs/heads/}
-          echo ${{steps.extract_branch.outputs.branch}}
+          echo 'get branch name is ' ${{steps.extract_branch.outputs.branch_name}}
 
   # This workflow contains a single job called "build"
   build:
