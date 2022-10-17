@@ -79,7 +79,7 @@ on:
 jobs:
   read-branch:
     runs-on: ubuntu-latest
-    if: ${GITHUB_REF##*/} == 'test' || ${GITHUB_REF##*/}  == 'stg' || ${GITHUB_REF##*/}  == 'main'
+    if: ${GITHUB_REF##*/} == 'test' ||  ${GITHUB_REF##*/}  == 'main'
     steps:
       - name: Read branch
         run: echo continue build
