@@ -80,6 +80,7 @@ jobs:
         run: |
           echo continue build
           echo {GITHUB_REF##*/}
+          echo ${BRANCH_NAME}
 
   # This workflow contains a single job called "build"
   build:
