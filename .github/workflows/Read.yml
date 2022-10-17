@@ -75,10 +75,11 @@ jobs:
   read:
     runs-on: ubuntu-latest
 #    if: ${{GITHUB_REF#refs/heads/}}  == 'main'
+    outputs:
+      branch_name:  ${{ steps.extract_branch.branch_name }}
     steps:
       - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch_name;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "branch_name = ${GITHUB_REF#refs/heads/})"
         id: extract_branch
       - name: Read branch name
         run: |
@@ -99,6 +100,7 @@ jobs:
       # Runs customer-defined-script
       - name: Run a CRD script
         run: |
+          echo 'This branch is ' ${{needs.read.outputs.branch_name}}
           cd functions; sh hello.sh
 
       # Runs a single command using the runners shell
