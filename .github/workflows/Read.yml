@@ -12,9 +12,76 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    branches:
+      - test
+      - stg
+      - main
+    inputs:
+      functionType:
+        description: 'function type'
+        required: true
+        default: 'trigger'
+        type: choice
+        options:
+          - trigger
+          - notifier
+          - record
+      triggerFunctionName:
+        description: 'trigger name'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - abandoned_offer
+          - abandonment
+          - applepie
+          - coffee_upsell
+          - coffeecoupon
+          - dessert
+          - full_onboarding
+          - lto_upsell
+          - occasion
+          - onboarding
+          - popular_dessert
+      notifierFunctionName:
+        description: 'notifier name'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - full_onboarding
+      recorderFunctionName:
+        description: 'recorder name'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - begin_checkout
+          - checkout_go_to_confirm_order
+          - choose_store
+          - first_open
+          - map_select_store
+          - purchase
+          - search_results_select_store
+          - use_counter_coupon
+          - use_mop_coupon
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  read:
+    runs-on: ubuntu-latest
+    steps:
+      runs-on: ubuntu-latest
+      if: ${GITHUB_REF##*/} == 'test' ||  ${GITHUB_REF##*/}  == 'main'
+      steps:
+        - name: Read branch name
+          run: echo continue build
+
+
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
