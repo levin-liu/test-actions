@@ -175,7 +175,7 @@ jobs:
       - name: DeployParam One
         if: ${{env.FunctionName != 'all' }}
         run: |
-          cd ${{env.ENV}}
+          cd ${{env.workdir}}
           pwd
           echo ${{env.FunctionName}}
           sh hello.sh
