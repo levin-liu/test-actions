@@ -127,7 +127,7 @@ jobs:
           echo "GCP_PROJECT=mcd-stg" >> $GITHUB_ENV   
           
       - name: Check Main param
-        if: $ {{ needs.read.outputs.branchName  == 'main' }}
+        if: ${{ needs.read.outputs.branchName  == 'main' }}
         run: |
           echo "ENV=main" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-main" >> $GITHUB_ENV
