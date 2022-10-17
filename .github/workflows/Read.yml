@@ -91,6 +91,7 @@ jobs:
           echo continue build
           echo ${GITHUB_REF#refs/heads/}
           echo ${GITHUB_HEAD_REF}
+          echo ${{github.head_ref}}
           echo 'get branch name is ' ${{steps.extract_branch.branch_name}}
           echo 'name is ${{steps.outputs.branch_name}}'
 
