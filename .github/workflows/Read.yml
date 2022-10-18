@@ -92,6 +92,7 @@ jobs:
         shell: bash
         run: |
           echo continue build
+          echo This is test case.
           echo 'The branch name is ' ${GITHUB_REF#refs/heads/}
 
   # This workflow contains a single job called "build"
@@ -117,6 +118,7 @@ jobs:
       - name: Check Test param
         if: ${{ github.ref == 'refs/heads/test' }}
         run: |
+          echo Test is working
           echo "ENV=test" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-test" >> $GITHUB_ENV
 
@@ -161,7 +163,7 @@ jobs:
           pwd
           echo ${{env.ENV}}
           echo ${{env.GCP_PROJECT}}
-           echo ${{env.workdir}}
+          echo ${{env.workdir}}
           echo ${{env.FunctionName}}
 
       - name: DeployParam All
