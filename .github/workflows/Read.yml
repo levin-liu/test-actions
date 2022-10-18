@@ -103,7 +103,7 @@ jobs:
       - name: Check Main param
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          echo "EnvName=main" >> $GITHUB_ENV 
+          echo "EnvName=release-prod" >> $GITHUB_ENV 
 
   # This workflow contains a single job called "build"
   build:
