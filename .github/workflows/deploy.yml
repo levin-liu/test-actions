@@ -1,190 +1,54 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy Cloud Functions
+name: Hello33
 
 # Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  #   push:
+  #     branches: [ "main" ]
+  #   pull_request:
+  #     branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    branches:
-      - release-test
-      - release-stg
-      - release-prod
-    inputs:
-      functionType:
-        description: 'function type'
-        required: true
-        default: 'trigger'
-        type: choice
-        options:
-          - trigger
-          - notifier
-          - recorder
-      triggerFunctionName:
-        description: 'trigger name'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - abandoned_offer
-          - abandonment
-          - applepie
-          - coffee_upsell
-          - coffeecoupon
-          - dessert
-          - full_onboarding
-          - lto_upsell
-          - occasion
-          - onboarding
-          - popular_dessert
-      notifierFunctionName:
-        description: 'notifier name'
-        required: false
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - full_onboarding
-      recorderFunctionName:
-        description: 'recorder name'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - begin_checkout
-          - checkout_go_to_confirm_order
-          - choose_store
-          - first_open
-          - map_select_store
-          - purchase
-          - search_results_select_store
-          - use_counter_coupon
-          - use_mop_coupon
-
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  read:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/release-test' || github.ref == 'refs/heads/release-stg' ||  github.ref == 'refs/heads/release-prod' }}
-    outputs:
-      branchName:  ${GITHUB_REF#refs/heads/}
-      functionType: ${{ inputs.functionType }}
-      triggerFunctionName: ${{ inputs.triggerFunctionName }}
-      notifierFunctionName: ${{ inputs.notifierFunctionName }}
-      recorderFunctionName: ${{ inputs.recorderFunctionName }}
-      functionDir: ${{ inputs.functionType }}
-
-    steps:
-      - name: Read branch name
-        run: |
-          echo 'The branch name is ' ${GITHUB_REF#refs/heads/}
-          echo continue build
-
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    needs: [read]
-    if: ${{ github.ref == 'refs/heads/release-test' || github.ref == 'refs/heads/release-stg' ||  github.ref == 'refs/heads/release-prod' }}
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
+      
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.SA_KEY }}
       # Runs customer-defined-script
-      - name: Echo param
+      - name: Run a CRD script
         run: |
-          echo 'This branch is ' ${{needs.read.outputs.branchName}}
-          echo 'FunctionType is ' ${{needs.read.outputs.functionType}}
-          echo 'TriggerFunctionName is ' ${{needs.read.outputs.triggerFunctionName}}
-          echo 'NotifierFunctionName is ' ${{needs.read.outputs.notifierFunctionName}}
-          echo 'EventFunctionName is ' ${{needs.read.outputs.recorderFunctionName}}
+          cd functions; sh hello.sh
 
-      - name: Check Test param
-        if: ${{ github.ref == 'refs/heads/release-test' }}
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
         run: |
-          echo "ENV=test" >> $GITHUB_ENV
-          echo "GCP_PROJECT=mcd-ketchup-dev" >> $GITHUB_ENV
-
-      - name: Check Stg param
-        if: ${{ github.ref == 'refs/heads/release-stg' }}
+          echo Add other actions to build,
+          echo test, and deploy your project.
+        
+      - name: Update dev branch
         run: |
-          echo "ENV=stg" >> $GITHUB_ENV
-          echo "GCP_PROJECT=mcd-dev-f605f" >> $GITHUB_ENV   
-
-      - name: Check Main param
-        if: ${{ github.ref == 'refs/heads/release-prod' }}
-        run: |
-          echo "ENV=prod" >> $GITHUB_ENV
-          echo "GCP_PROJECT=nth-glass-770" >> $GITHUB_ENV
-
-      - name: Check Trigger FunctionType
-        if: ${{ needs.read.outputs.functionType == 'trigger' }}
-        run: |
-          pwd
-          echo "workdir=cloudfunctions/trigger_workflow" >> $GITHUB_ENV
-          echo "FunctionName=${{needs.read.outputs.triggerFunctionName}}" >> $GITHUB_ENV
-
-      - id: auth_test
-        if: ${{ github.ref == 'refs/heads/release-test' }}
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
-
-      - id: auth_stg
-        if: ${{ github.ref == 'refs/heads/release-stg' }}
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.GCLOUD_STG_CREDENTIALS }}
-
-      - id: auth_prod
-        if: ${{ github.ref == 'refs/heads/release-prod' }}
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.GCLOUD_PROD_CREDENTIALS }}
-
-      - name: Check Recorder FunctionType
-        if: ${{ needs.read.outputs.functionType == 'recorder' }}
-        run: |
-          pwd
-          echo "workdir=cloudfunctions/event_recorder" >> $GITHUB_ENV
-          echo "FunctionName=${{needs.read.outputs.recorderFunctionName}}" >> $GITHUB_ENV
-
-      - name: Check Notifier FunctionType
-        if: ${{ needs.read.outputs.functionType == 'notifier' }}
-        run: |
-          pwd
-          echo "workdir=cloudfunctions/event_notifier" >> $GITHUB_ENV
-          echo "FunctionName=${{needs.read.outputs.notifierFunctionName}}" >> $GITHUB_ENV
-
-      - name:  Echo Param Result
-        run: |
-          pwd
-          echo ${{env.ENV}}
-          echo ${{env.GCP_PROJECT}}
-          echo ${{env.workdir}}
-          echo ${{env.FunctionName}}
-
-      - name: DeployParam All
-        if: ${{env.FunctionName == 'all'}}
-        run: |
-          cd ${{env.ENV}}
-          pwd
-          ENV=${{env.ENV}}  make deploy-all
-          
-
-      - name: DeployParam One
-        if: ${{env.FunctionName != 'all' }}
-        run: |
-          cd ${{env.workdir}}
-          pwd
-          echo ${{env.FunctionName}}
-          ENV=${{env.ENV}} WORKFLOW=${{env.FunctionName}} make deploy
-
+          gcloud config set project enhanced-cable-365505;
+          gcloud functions list
+          cd functions/test_latency
+          make deploy-dev
+          gcloud functions list
