@@ -11,7 +11,7 @@ on:
       - stg
       - main
     paths:
-      - .github/workflows/TestRead.yml
+      - ".github/workflows/TestRead.yml"
     inputs:
       functionType:
         description: 'function type'
