@@ -65,6 +65,12 @@ on:
           - use_mop_coupon
 
 
+env:
+  TestBranchName: refs/heads/test
+  StgBranchName: refs/heads/stg
+  ProdBranchName: refs/heads/main
+
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   read:
@@ -176,6 +182,9 @@ jobs:
           echo ${{env.workdir}}
           echo ${{env.FunctionName}}
           echo ${{needs.read.outputs.EnvName}}
+          echo ${{env.TestBranchName}}
+          echo ${{env.StgBranchName}}
+          echo ${{env.ProdBranchName}}
 
       - name: DeployParam All
         if: ${{env.FunctionName == 'all'}}
