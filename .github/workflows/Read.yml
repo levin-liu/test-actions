@@ -66,12 +66,12 @@ on:
 
 
 env:
-  TestBranchName: refs/heads/test
-  StgBranchName: refs/heads/stg
-  ProdBranchName: refs/heads/main
-  TriggerCFName: trigger
-  NotifierCFName: notifier
-  RecorderCFName: recorder
+  - TestBranchName: refs/heads/test
+    StgBranchName: refs/heads/stg
+    ProdBranchName: refs/heads/main
+    TriggerCFName: trigger
+    NotifierCFName: notifier
+    RecorderCFName: recorder
 
 
 
