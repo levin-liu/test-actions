@@ -77,6 +77,7 @@ jobs:
       notifierFunctionName: ${{ inputs.notifierFunctionName }}
       recorderFunctionName: ${{ inputs.recorderFunctionName }}
       functionDir: ${{ inputs.functionType }}
+      envName: ${{ env.EnvName }}
 
     steps:
       - name: Extract param
@@ -89,10 +90,26 @@ jobs:
           echo continue build
           echo 'The branch name is ' ${GITHUB_REF#refs/heads/}
 
+      - name: Check Test param
+        if: ${{ github.ref == 'refs/heads/test' }}
+        run: |
+          echo "EnvName=release-test" >> $GITHUB_ENV
+
+      - name: Check Stg param
+        if: ${{ github.ref == 'refs/heads/stg' }}
+        run: |
+          echo "EnvName=release-stg" >> $GITHUB_ENV
+
+      - name: Check Main param
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          echo "EnvName=main" >> $GITHUB_ENV 
+
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: ${{needs.read.outputs.EnvName}}
     needs: [read]
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'  }}
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -156,8 +173,9 @@ jobs:
           pwd
           echo ${{env.ENV}}
           echo ${{env.GCP_PROJECT}}
-           echo ${{env.workdir}}
+          echo ${{env.workdir}}
           echo ${{env.FunctionName}}
+          echo ${{needs.read.outputs.EnvName}}
 
       - name: DeployParam All
         if: ${{env.FunctionName == 'all'}}
@@ -179,8 +197,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/test' }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
-        environment:
-          name: release-test
         with:
           credentials_json: ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
 
@@ -188,8 +204,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/stg' }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
-        environment:
-          name: release-stg
         with:
           credentials_json: ${{ secrets.GCLOUD_STG_CREDENTIALS }}
 
@@ -197,8 +211,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
-        environment:
-          name: release-prod
         with:
           credentials_json: ${{ secrets.GCLOUD_PROD_CREDENTIALS }}
 
