@@ -175,7 +175,7 @@ jobs:
           echo ${{env.FunctionName}}
           sh hello.sh
           
-            - id: auth_test
+      - id: auth_test
         if: ${{ github.ref == 'refs/heads/test' }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
