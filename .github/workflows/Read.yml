@@ -179,7 +179,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/test' }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
-        environment: release-test
+        environment:
+          name: release-test
         with:
           credentials_json: ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
 
@@ -187,7 +188,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/stg' }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
-        environment: release-stg
+        environment:
+          name: release-stg
         with:
           credentials_json: ${{ secrets.GCLOUD_STG_CREDENTIALS }}
 
@@ -195,7 +197,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
-        environment: release-prod
+        environment:
+          name: release-prod
         with:
           credentials_json: ${{ secrets.GCLOUD_PROD_CREDENTIALS }}
 
