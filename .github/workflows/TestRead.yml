@@ -16,6 +16,8 @@ on:
       - test
       - stg
       - main
+    paths:
+      - ".github/workflows/TestRead.yaml"
     inputs:
       functionType:
         description: 'function type'
