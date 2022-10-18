@@ -87,7 +87,7 @@ jobs:
       notifierFunctionName: ${{ inputs.notifierFunctionName }}
       recorderFunctionName: ${{ inputs.recorderFunctionName }}
       functionDir: ${{ inputs.functionType }}
-      envName: ${{ env.EnvName }}
+      EnvName: ${{ env.EnvName }}
 
     steps:
       - name: Extract param
@@ -103,17 +103,17 @@ jobs:
       - name: Check Test param
         if: ${{ github.ref == env.TestBranchName }}
         run: |
-          echo "EnvName=release-test" >> $GITHUB_ENV
+          echo "EnvName=test" >> $GITHUB_ENV
 
       - name: Check Stg param
         if: ${{ github.ref == env.StgBranchName }}
         run: |
-          echo "EnvName=release-stg" >> $GITHUB_ENV
+          echo "EnvName=stg" >> $GITHUB_ENV
 
       - name: Check Main param
         if: ${{ github.ref == env.ProdBranchName }}
         run: |
-          echo "EnvName=release-prod" >> $GITHUB_ENV 
+          echo "EnvName=prod" >> $GITHUB_ENV 
 
   # This workflow contains a single job called "build"
   build:
