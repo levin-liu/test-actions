@@ -69,6 +69,10 @@ env:
   TestBranchName: refs/heads/test
   StgBranchName: refs/heads/stg
   ProdBranchName: refs/heads/main
+  TriggerCFName: trigger
+  NotifierCFName: notifier
+  RecorderCFName: recorder
+
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -97,17 +101,17 @@ jobs:
           echo 'The branch name is ' ${GITHUB_REF#refs/heads/}
 
       - name: Check Test param
-        if: ${{ github.ref == 'refs/heads/test' }}
+        if: ${{ github.ref == env.TestBranchName }}
         run: |
           echo "EnvName=release-test" >> $GITHUB_ENV
 
       - name: Check Stg param
-        if: ${{ github.ref == 'refs/heads/stg' }}
+        if: ${{ github.ref == env.StgBranchName }}
         run: |
           echo "EnvName=release-stg" >> $GITHUB_ENV
 
       - name: Check Main param
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == env.ProdBranchName }}
         run: |
           echo "EnvName=release-prod" >> $GITHUB_ENV 
 
@@ -117,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{needs.read.outputs.EnvName}}
     needs: [read]
-    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'  }}
+    if: ${{ github.ref == env.TestBranchName || github.ref == env.ProdBranchName  }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -133,19 +137,19 @@ jobs:
           echo 'EventFunctionName is ' ${{needs.read.outputs.recorderFunctionName}}
 
       - name: Check Test param
-        if: ${{ github.ref == 'refs/heads/test' }}
+        if: ${{ github.ref == env.TestBranchName }}
         run: |
           echo "ENV=test" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-test" >> $GITHUB_ENV
 
       - name: Check Stg param
-        if: ${{ github.ref == 'refs/heads/stg' }}
+        if: ${{ github.ref == env.StgBranchName }}
         run: |
           echo "ENV=stg" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-stg" >> $GITHUB_ENV   
           
       - name: Check Main param
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == env.ProdBranchName }}
         run: |
           echo "ENV=main" >> $GITHUB_ENV
           echo "GCP_PROJECT=mcd-main" >> $GITHUB_ENV
@@ -203,21 +207,21 @@ jobs:
           sh hello.sh
           
       - id: auth_test
-        if: ${{ github.ref == 'refs/heads/test' }}
+        if: ${{ github.ref == env.TestBranchName }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
 
       - id: auth_stg
-        if: ${{ github.ref == 'refs/heads/stg' }}
+        if: ${{ github.ref == env.StgBranchName }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.GCLOUD_STG_CREDENTIALS }}
 
       - id: auth_prod
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == env.ProdBranchName }}
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v0
         with:
