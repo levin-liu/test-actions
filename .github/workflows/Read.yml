@@ -189,7 +189,7 @@ jobs:
       - name: DeployParam All
         if: ${{env.FunctionName == 'all'}}
         run: |
-          cd ${{env.ENV}}
+          cd ${{env.workdir}}
           pwd
           echo Make_ALL
           sh hello.sh
