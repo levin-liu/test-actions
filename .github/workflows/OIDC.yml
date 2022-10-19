@@ -205,11 +205,6 @@ jobs:
           create_credentials_file: 'true'
           workload_identity_provider: 'projects/830132220123/locations/global/workloadIdentityPools/cannon_pool/providers/actions'
           service_account: 'enhanced-cable-365505@appspot.gserviceaccount.com'
-      - id: 'gcloud'
-        name: 'gcloud'
-        run: |-
-          gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
-          gcloud functions list
 
       - name: Display result
         run: |
