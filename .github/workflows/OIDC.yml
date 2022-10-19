@@ -203,7 +203,7 @@ jobs:
         uses: 'google-github-actions/auth@v0.3.1'
         with:
           create_credentials_file: 'true'
-          workload_identity_provider: 'projects/enhanced-cable-365505/locations/global/workloadIdentityPools/github/providers/actions'
+          workload_identity_provider: 'projects/830132220123/locations/global/workloadIdentityPools/hello/providers/actions'
           service_account: 'enhanced-cable-365505@appspot.gserviceaccount.com'
       - id: 'gcloud'
         name: 'gcloud'
