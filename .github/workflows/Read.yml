@@ -65,15 +65,6 @@ on:
           - use_mop_coupon
 
 
-env:
-  - TestBranchName: refs/heads/test
-    StgBranchName: refs/heads/stg
-    ProdBranchName: refs/heads/main
-    TriggerCFName: trigger
-    NotifierCFName: notifier
-    RecorderCFName: recorder
-
-
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
