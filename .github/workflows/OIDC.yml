@@ -213,8 +213,8 @@ jobs:
 
       - name: Display result
         run: |
-#          gcloud config set project enhanced-cable-365505;
           gcloud functions list
+#          gcloud config set project enhanced-cable-365505;
 #          cd functions/test_latency
 #          make deploy-dev
 #          gcloud functions list
