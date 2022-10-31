@@ -233,6 +233,8 @@ jobs:
 #          make deploy-dev
 #          gcloud functions list
 
-      - name: Compare type
+      - name: Set function name
         run: |
+          echo Set function name
+          
           
