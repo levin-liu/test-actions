@@ -7,11 +7,6 @@ env:
   deployment1: applepie
   deployment2: coffee_upsell
   triggerAllDeployment: ',abandoned_offer,abandonment,coffee_upsell,coffeecoupon,full_onboading,popular_dessert,'
-  array: [
-    { "name": "apple", "quantity": 1 },
-    { "name": "orange", "quantity": 2 },
-    { "name": "pear", "quantity": 1 }
-  ]
 
 # Controls when the workflow will run
 on:
