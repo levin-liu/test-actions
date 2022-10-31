@@ -184,6 +184,7 @@ jobs:
           echo ${{env.TestBranchName}}
           echo ${{env.StgBranchName}}
           echo ${{env.ProdBranchName}}
+          echo ${{env.triggerAllDeployment}}
 
       - name: DeployParam All
         if: ${{env.FunctionName == 'all'}}
