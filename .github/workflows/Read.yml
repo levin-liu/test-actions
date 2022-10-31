@@ -2,6 +2,10 @@
 
 name: Read
 
+
+env:
+  triggerAllDeployment: ',abandoned_offer,abandonment,coffee_upsell,coffeecoupon,full_onboading,popular_dessert,'
+
 # Controls when the workflow will run
 on:
 
