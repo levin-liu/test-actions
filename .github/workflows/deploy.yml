@@ -13,4 +13,3 @@ jobs:
       - run: |
           echo The PR was merged
           echo Depoly start to run
-
