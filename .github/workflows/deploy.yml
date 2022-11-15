@@ -13,5 +13,5 @@ jobs:
       - run: |
           echo Start Deploy Mock
           echo ${{ secrets.ENV_NAME }}
-          echo ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
+#          echo ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
           echo Job Finished
