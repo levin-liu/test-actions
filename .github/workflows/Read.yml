@@ -2,13 +2,14 @@
 
 name: Read
 
+
+env:
+  deployment1: applepie
+  deployment2: coffee_upsell
+  triggerAllDeployment: ',abandoned_offer,abandonment,coffee_upsell,coffeecoupon,full_onboading,popular_dessert,'
+
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  #   push:
-  #     branches: [ "main" ]
-  #   pull_request:
-  #     branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -70,6 +71,7 @@ on:
           - use_mop_coupon
 
 
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   read:
@@ -82,6 +84,7 @@ jobs:
       notifierFunctionName: ${{ inputs.notifierFunctionName }}
       recorderFunctionName: ${{ inputs.recorderFunctionName }}
       functionDir: ${{ inputs.functionType }}
+      envName: ${{ env.EnvName }}
 
     steps:
       - name: Extract param
@@ -95,12 +98,28 @@ jobs:
           echo This is test case.
           echo 'The branch name is ' ${GITHUB_REF#refs/heads/}
 
+      - name: Check Test param
+        if: ${{ github.ref == 'refs/heads/test' }}
+        run: |
+          echo "EnvName=release-test" >> $GITHUB_ENV
+
+      - name: Check Stg param
+        if: ${{ github.ref == 'refs/heads/stg' }}
+        run: |
+          echo "EnvName=release-stg" >> $GITHUB_ENV
+
+      - name: Check Main param
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          echo "EnvName=release-prod" >> $GITHUB_ENV 
+
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: ${{needs.read.outputs.envName}}
     needs: [read]
-    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test'  }}
+    if: ${{ github.ref == 'refs/heads/test' || github.ref == 'refs/heads/main'  }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -165,11 +184,16 @@ jobs:
           echo ${{env.GCP_PROJECT}}
           echo ${{env.workdir}}
           echo ${{env.FunctionName}}
+          echo ${{needs.read.outputs.envName}}
+          echo ${{env.TestBranchName}}
+          echo ${{env.StgBranchName}}
+          echo ${{env.ProdBranchName}}
+          echo ${{env.triggerAllDeployment}}
 
       - name: DeployParam All
         if: ${{env.FunctionName == 'all'}}
         run: |
-          cd ${{env.ENV}}
+          cd ${{env.workdir}}
           pwd
           echo Make_ALL
           sh hello.sh
@@ -181,3 +205,38 @@ jobs:
           pwd
           echo ${{env.FunctionName}}
           sh hello.sh
+          
+      - id: auth_test
+        if: ${{ github.ref == 'refs/heads/test' }}
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
+
+      - id: auth_stg
+        if: ${{ github.ref == 'refs/heads/stg' }}
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCLOUD_STG_CREDENTIALS }}
+
+      - id: auth_prod
+        if: ${{ github.ref == 'refs/heads/main' }}
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCLOUD_PROD_CREDENTIALS }}
+
+      - name: Display result
+        run: |
+          gcloud config set project enhanced-cable-365505;
+          gcloud functions list
+#          cd functions/test_latency
+#          make deploy-dev
+#          gcloud functions list
+
+      - name: Set function name
+        run: |
+          echo Set function name
+          
+          
