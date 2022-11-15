@@ -11,5 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo Start Deploy Mock
-          echo Job Finished
+          echo The PR was merged
+          echo Depoly start to run
+
