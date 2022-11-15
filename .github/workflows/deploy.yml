@@ -12,5 +12,4 @@ jobs:
     steps:
       - run: |
           echo Start Deploy Mock
-          echo ${{ secrets.ENV_NAME }}
           echo Job Finished
