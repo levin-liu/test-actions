@@ -1,0 +1,17 @@
+name: demo.push
+
+on:
+  workflow_run:
+    workflows: [demo.pr]
+    types: [completed]
+    branches: [test]
+
+jobs:
+  depoly_test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo Start Deploy Mock
+          echo ${{ secrets.ENV_NAME }}
+          echo ${{ secrets.GCLOUD_TEST_CREDENTIALS }}
+          echo Job Finished
